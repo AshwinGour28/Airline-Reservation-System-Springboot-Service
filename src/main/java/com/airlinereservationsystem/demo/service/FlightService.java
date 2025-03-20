@@ -18,9 +18,10 @@ public class FlightService {
         return flightRepository.getAllFlights(sort);
     }
 
-    public Flight addFlight(Flight flight){
+    public Flight addFlight(Flight flight) {
         return flightRepository.addFlight(flight);
     }
+
 
     public Flight getFlightById(@PathVariable String id){
         System.out.println("service "+id);

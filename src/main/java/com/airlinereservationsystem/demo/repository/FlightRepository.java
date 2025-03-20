@@ -33,13 +33,16 @@ public class FlightRepository {
         return flights;
     }
 
-        public Flight addFlight(Flight flight){
-            String flightId = flight.getId();
-            this.flightsTable.put(flightId, flight);
-            return flight.toBuilder().id(flightId).build();
+    public Flight addFlight(Flight flight) {
+        if (flightsTable.containsKey(flight.getId())) {
+            return null; // Indicates duplicate flight
         }
+        flightsTable.put(flight.getId(), flight);
+        return flight;
+    }
 
-        public Flight getFlightById(String id) {
+
+    public Flight getFlightById(String id) {
             System.out.println("repo"+id);
             System.out.println(this);
             return this.flightsTable.getOrDefault(id, null);

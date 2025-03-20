@@ -3,6 +3,7 @@ package com.airlinereservationsystem.demo.controller;
 import com.airlinereservationsystem.demo.dto.Flight;
 import com.airlinereservationsystem.demo.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,16 @@ public class FlightController {
     }
 
     @PostMapping
-    Flight createFlight(@RequestBody Flight flight){
-        return flightService.addFlight(flight);
+    public ResponseEntity<String> createFlight(@RequestBody Flight flight) {
+        if (flightService.getFlightById(flight.getId()) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Flight with ID " + flight.getId() + " already exists!");
+        }
+
+        Flight newFlight = flightService.addFlight(flight);
+        return newFlight != null
+                ? ResponseEntity.status(HttpStatus.CREATED).body("Flight added successfully with ID: " + newFlight.getId())
+                : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding flight.");
     }
 
     @GetMapping("/{id}")
